@@ -1,0 +1,9 @@
+Time_occured
+Area
+Crime_Code
+Victim_age
+Victim_sex
+Victim_descent
+LOCATION
+Senjata
+tempat_kejadian
