@@ -22,6 +22,7 @@ from sklearn.cluster import KMeans
 from feature_engine.imputation import RandomSampleImputer
 from imblearn.over_sampling import SMOTE
 import warnings
+from huggingface_hub import hf_hub_download
 warnings.filterwarnings('ignore')
 
 # --------------------------------------- FUNCTION -------------------------------------------------- #
@@ -139,12 +140,25 @@ def load_data():
         
         return raw_df, encoded_df
 # ---------------------------------------------------------------------------------- #
+
 @st.cache_resource
 def load_models():
-        """Load model dan encoder"""
-        model = pickle.load(open('models/model.pkl', 'rb'))
-        encoder = joblib.load('models/encoder.pkl')
-        return model, encoder
+    """Load model dan encoder dari Hugging Face Hub"""
+    
+    # Tentukan nama repositori Anda
+    repo_id = "mariiosrg/crime_prediction"
+    
+    # Unduh file model dan dapatkan path lokalnya
+    model_path = hf_hub_download(repo_id=repo_id, filename="model.pkl")
+    
+    # Unduh file encoder dan dapatkan path lokalnya
+    encoder_path = hf_hub_download(repo_id=repo_id, filename="encoder.pkl")
+    
+    # Muat model dan encoder dari path yang sudah diunduh
+    model = pickle.load(open(model_path, 'rb'))
+    encoder = joblib.load(encoder_path)
+    
+    return model, encoder
 # ---------------------------------------------------------------------------------- #
 def get_feature_names(model):
         """Get feature names dari model dalam urutan yang benar"""
